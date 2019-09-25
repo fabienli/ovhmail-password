@@ -3,7 +3,10 @@
 // Licence: http://www.opensource.org/licenses/zlib-license.php
 // Requires: php 5
 
+require_once('vendor/autoload.php');
 require_once(dirname(__FILE__).'/config.php');
+
+use \Ovh\Api;
 
 $errors = array();
 $passwordmail = '';
@@ -43,44 +46,39 @@ if (!$mbox) {
 
 	$success = '';
 	if (strlen($newpass) >= 8 && $newpass == $newpass2 && $_POST["newpass"]==$newpass) {
-	// Vérification du bon nouveau mot de passe (avec les deux champs puis on valide si ok )
-		$soap = new SoapClient('https://www.ovh.com/soapi/soapi-1.2.wsdl');
+		// Vérification du bon nouveau mot de passe (avec les deux champs puis on valide si ok )
 
-		//login
+		$ovh = new Api($application_key, $application_secret, $endpoint, $consumer_key);
 		try {
-			$language = null;
-			$multisession = false;
-			$session = $soap->login($nic,$pass,$language,$multisession);
-			//$success .= "login successfull<br/>";
-		} catch(SoapFault $fault) {
-			$errors[] = "Error : login";//.$fault;
-		}
-		//popModifyPassword
-		try {
-			$result = $soap->popModifyPassword($session, $domain, $email_name, $newpass, false);
-			//$success .= "popModifyPassword successfull<br/>";
-			//$success .= print_r($result);
-			//$success .= "<br/>";
-			$success .= "<h3>Thank you.<br />Password has been modified.</h3>";
-			$success .= "<h3>The change will be visible maximally in 15 minutes.</h3>";
-		} catch(SoapFault $fault) {
-			$errors[] = "Error : popModifyPassword";//.$fault;.$fault;
-		}
-		//logout
-		try {
-			$result = $soap->logout($session);
-			//$success .= "logout successfull<br/>";
-		} catch(SoapFault $fault) {
-			$errors[] = "Error : logout";//.$fault;.$fault;
+				$result = $ovh->post("/email/domain/$domain/account/$email_name/changePassword", array( 'password' => $newpass , ));
+				$success .= "<h3>Thank you.<br />Password has been modified.</h3>";
+				$success .= "<h3>The change will be visible maximally in 15 minutes.</h3>";
+		} catch (ClientErrorResponseException $exception) {
+				$errorCode = $exception->getResponse()->getStatusCode();
+				switch ($errorCode) {
+				case 403:
+						rcube::raise_error(array(
+						'code' => $errorCode,
+						'type' => 'ovh',
+						'file' => __FILE__,
+						'line' => __LINE__,
+						'message' => $exception->getResponse()->getBody(true)
+						), true, false);
+						$errors[] = "PASSWORD_CONNECT_ERROR";
+						break;
+				default:
+						$errors[] = "PASSWORD_ERROR";
+						break;
+				}
 		}
 	} elseif (strlen($newpass) > 0 && $newpass != $newpass2) {
 	// ici le cas ou le premier nouveau mot de passe ne correspond pas au second
 		$errors[] = "The two passwords are not equal, please check it";
 	} elseif (strlen($newpass) > 0 && strlen($newpass) < 8) {
-	// Si le mot de passe fait moins de 8 caractères on refuse 
+	// Si le mot de passe fait moins de 8 caractères on refuse
 		$errors[] = "Make sure your password has minimum 8 characters.";
 	} elseif ($_POST["newpass"]!=$newpass) {
-	// Si le mot de passe fait moins de 8 caractères on refuse 
+	// Si le mot de passe fait moins de 8 caractères on refuse
 		$errors[] = "Password contains one or more of invalid characters:<ul><li>\'</li><li>\"</li><li>\\</li><li>\?</li><li>\~</li></ul>";
 	}
 }
