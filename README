@@ -3,22 +3,28 @@ This is a small script to setup on your OVH mutualisated server to manage email 
 To install, follow the following steps :
 1) create a config.php file. Copy the config_sample.php file to config.php and edit the file to set your OVH nic-handle and you password. The file should look like this :
 <?php
-$nic = "xxxxx-ovh"; // your ovh nichandle
-$pass = "*******"; // your ovh password
 $domain = "yourdomain.tld"; // your domain name
 $serveur="pop3.". $domain;
 $dom = "@". $domain;
+// API token created from https://api.ovh.com/createToken/
+$application_key = 'c*Y*A*f*K*y*h*e3';
+$application_secret = 'c*8*R*w*x*1*5*6*R*K*f*H*a*E*t*rW';
+$endpoint = 'ovh-eu';
+$consumer_key = '7*e*z*E*x*H*9*L*p*2*z*E*x*5*w*eT';
 ?>
 
-2) just copy all the files in a folder of your mutualisated server. For example :
+2) integrate the ovh api in php
+more details here: https://github.com/ovh/php-ovh
+is you're using a mutualisated hosting, you can consider using: https://php-download.com/package/ovh/ovh
+
+3) copy all the files in a folder of your mutualisated server. For example :
 mail/common.css
 mail/config.php
-mail/config_sample.php
 mail/index.php
 mail/logo.jpg
 mail/README
 
-3) surf with your prefered navigator to yourdomain.tld/mail
+4) surf with your prefered navigator to yourdomain.tld/mail
 
 That's it ! Have fun
 
