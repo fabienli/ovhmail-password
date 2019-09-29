@@ -1,4 +1,4 @@
-This is a small script to setup on your OVH mutualisated server to manage email passwords
+This is a small script to setup on your OVH mutualised server to manage email passwords
 
 To install, follow the following steps :
 1) create a config.php file. Copy the config_sample.php file to config.php and edit the file to set your OVH nic-handle and you password. The file should look like this :
@@ -17,7 +17,7 @@ $consumer_key = '7*e*z*E*x*H*9*L*p*2*z*E*x*5*w*eT';
 more details here: https://github.com/ovh/php-ovh
 is you're using a mutualisated hosting, you can consider using: https://php-download.com/package/ovh/ovh
 
-3) copy all the files in a folder of your mutualisated server. For example :
+3) copy all the files in a folder of your mutualised server. For example :
 mail/common.css
 mail/config.php
 mail/index.php
