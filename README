@@ -15,7 +15,7 @@ $consumer_key = '7*e*z*E*x*H*9*L*p*2*z*E*x*5*w*eT';
 
 2) integrate the ovh api in php
 more details here: https://github.com/ovh/php-ovh
-is you're using a mutualisated hosting, you can consider using: https://php-download.com/package/ovh/ovh
+is you're using a mutualised hosting, you can consider using: https://php-download.com/package/ovh/ovh
 
 3) copy all the files in a folder of your mutualised server. For example :
 mail/common.css
