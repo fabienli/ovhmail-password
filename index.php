@@ -57,13 +57,6 @@ if (!$mbox) {
 				$errorCode = $exception->getResponse()->getStatusCode();
 				switch ($errorCode) {
 				case 403:
-						rcube::raise_error(array(
-						'code' => $errorCode,
-						'type' => 'ovh',
-						'file' => __FILE__,
-						'line' => __LINE__,
-						'message' => $exception->getResponse()->getBody(true)
-						), true, false);
 						$errors[] = "PASSWORD_CONNECT_ERROR";
 						break;
 				default:
